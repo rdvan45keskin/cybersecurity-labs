@@ -1,0 +1,84 @@
+fortigate ip adresini hatırlamayanlar aşağıdaki kodu fortigate
+konsoluna yazsınlar
+
+show system interface port1
+-------------------------------------------------------------
+Fortigate Arayüzünde, portları birer birim olarak ayarlamak
+Örneğin, port2'yi muhasebe, port3'ü de pazarlama birimi olarak
+tanıtacağız.
+
+Sol taraftaki Menüden Network->Interfaces seçeneğini tıklayın
+
+karşınıza, fortigate'ye ait 10 port'un tamamı gelecektir.
+port2'yi MUHASEBE, port3'ü de PAZARLAMA olarak ayarlayacağız.
+Bunlar bir firmanın 2 birimini temsil edecektir.
+
+MUHASEBE (port2) için IP/SUBNET Bilgisi: 192.168.10.1/24
+PAZARLAMA (port3) için IP/SUBNET Bilgisi: 192.168.20.1/24
+
+İnternete çıkmasını istediğimiz birimleri oluşturduk. Sıra geldi
+bir WAN portu oluşturmaya. Yani, bu birimler hangi port 
+üzerinden internete çıkacak? Şimdi de bunu ayarlayacağız.
+WAN portu olarak port10'u seçiyoruz.
+
+IP/SUBNET mask bilgisi yandaki gibi olan 0.0.0.0/0.0.0.0
+bir ağ, herkes tarafından erişme açık demektir.
+
+NOT: Bu sayede, Network->Interfaces menüsünü kullanarak
+hangi birimlerin oluşturulacağına karar vermiş olduk.
+Şimdi sıra geldi bu birimlerin internete çıkış davranışlarını
+düzenlemeye. Bunun için de Yine sol taraftaki Policy&Objects
+menüsünden faydalanacağız.
+-----------------------------------------------------------
+Sol taraftaki Policy&Objects menüsüne tıklıyoruz.
+Bu menü, firewall arayüzündeki belki de en önemli menüdür.
+Çünkü, birimlerin (her bir ağ tarafından ifade edilen yapılar)
+nasıl davranacağına bunlar karar verir.
+Policy demek aslında kural demektir. Bizler, firewall sayesinde
+hem birimlerin tamamı için hem de o birimdeki tek bir kullanıcı 
+için kural yazabiliriz. İster izin vermek için ister yasaklamak için
+
+Policy&Objects->Firewall Policy seçeneğini tıklayın.
+karşınıza gelen sayfadaki +Create New butonuna tıklayın
+
+Name: Kurala bir isim verilir. Genellikle hangi birim (port) için
+yazılıyorsa o portun ismi verilir (Muhasebe ya da Pazarlama)
+
+Incoming Interface: Kuralı yazdığımız port (biz muhasebe portunun
+internete çıkışı için yazdığımızdan dolayı MUHASEBE(port2)'yi seçtik
+
+Outcoming Interface: Incoming Interface birimi hangi port
+üzerinden internete bağlanacak? Biz tüm portların port10 (WAN)
+portu üzerinden internete çıkmasını istemiştik. Bundan dolayı
+Outcoming Interface olarak WAN(port10)'u seçiyoruz.
+
+Source: Incoming Interface içerisinde yer alan hangi makineler
+yani hangi kullanıcılar dahil olsun demektir.
+
+Destination: İnternete bağlanırken herhangi bir kısıt olacak mı?
+Hizmet (services anlamında). Biz izin verdiğimiz kullanıcıların
+tam bir yetkiyle tüm web sitelerine ve tüm web hizmetlerine
+erişmesini istiyorsak all seçeneğini tıklıyoruz.
+
+------------------------------------------------------------
+Kullanıcı Yasaklamak için Policy (Kural) yazma
+NOT: Bir policy tanımlandığında sırası çok önemlidir.
+Tüm firewall yazılımlarında tek kuraldır. Geçerli olan kural
+(policy) DAİMA ÜSTTEKİ OLANDIR.
+BU NEDENLE YASAKLAMA AMAÇLI YAZILAN KURALLAR KESİNLİKLE,
+İZİN VERİLEN KURALLARDAN ÜSTTE YER ALMALIDIR. AKSİ HALDE
+GEÇERLİ OLMAZLAR!!!!
+
+------------------------------------------------------------
+WebFilter (İNTERNETE ERİŞEN KULLANICILAR HANGİ SİTELERE
+ERİŞEBİLECEK?)
+
+Security Profiles Menüsü altında 2. sırada yer alan Web Filter
+seçeneğini tıkladıktan sonra Create New butonuna tıklayınız.
+
+Allow,Monitor, Block, Warning, Authenticate seçeneklerinden
+Sadece allow için loglama yapılmaz.
+
+
+
+

@@ -1,0 +1,71 @@
+login: admin
+password : admin
+şifre kısmı geldiğinde hiçbir bilgi girmeden
+sadece enter tuşuna basın
+
+ilk komut:
+# config: configuration'un kısaltması
+# interface: arayüz, web tabanlı arayüz için
+# arka planda işlem yapar
+# ntp, bir protokoldür, tarih ve saat güncellemesin
+# gerçekleştirerek bir pathc (yamanın) lisans'ı cracklemesinin
+# önüne geçer
+# set type custom, sistemsel (varsayılan) ayar yerine
+# benim yukarıda tanımladığım kodları baz al  demektir.
+
+# end komutu, bir yetkiden çıkmamızı sağlar,
+# bizi bir önceki seviyeye getirir
+
+config system ntp
+set ntpsync disable
+set type custom
+end
+
+end, komutundan sonra makineyi kapatın
+sonra Network Adapter yazan yere tıklayıp
+Connect at power on seçeneğini işaretleyin ve OK
+butonuna tıklayın. Daha sonra makineyi tekrar
+başlatın.
+NOT: Sadece Network Adapter yazan yerde bu işlemi
+yapın geriye kalan 9 Network adapter için bu seçenek
+yine kapalı kalacak
+
+
+Şimdi tekrar login olduktan sonra, windows makinemizde
+cmd yazıp komut satırına ipconfig komutunu giriyoruz.
+
+ipconfig komutunun çıktıların wi-fi yazan yerin altındaki
+ip adresini ve subnet mask bilgisini not edin.
+
+IPv4 Address. . . . . . . . . . . : ***.***.***.51
+Subnet Mask . . . . . . . . . . . : 255.255.255.0
+
+ip adresini ve subnet mask bilgisini not ettikten sonra
+aşağıdaki komutları sırasıyla fortigate konsoluna yazıyoruz
+NOT: Varsayılan olarak ip adresi dinamik şekilde
+DHCP protokolü üzerinden dağıtılıyor. Biz, sanal firewall
+yazılımımız için windows makinemizle aynı ip blokunda
+yer almasını istiyoruz. Bunun için set  mode static
+komutu ile ip dağıtımını biz manuel olarak vereceğiz.
+
+config system interface
+edit port1
+set allowaccess http https ping
+set mode static
+set ip 172.20.10. 255.255.255.240
+end
+
+
+windows makinenizden cmd komutu ile komut istemcisini açın
+
+ping fortigate_makine_ip_adresi
+
+ping ***.***.***.100
+
+172'li blokta olan ip adresi olarak kendi ip adresleri
+haricinde 1 ile 7 arasında bir ip adresi versinler
+
+
+
+
+
